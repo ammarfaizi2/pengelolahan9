@@ -13,7 +13,7 @@ function reconstruct_tagihan_bulanan($koneksi, $id_siswa, $id_kelas, $gaji)
     INNER JOIN tb_jenis_bayar AS b
     ON a.id_bayar = b.id_bayar
     WHERE a.batas_bawah <= {$gaji} AND a.batas_atas >= {$gaji}
-    AND a.id_kelas = '{$id_kelas}'"
+    AND a.id_kelas = '{$id_kelas}' AND b.tipe_bayar = 'Bulanan'"
   );
   if (!$q1) { var_dump(mysqli_error($koneksi));die;}
   $query = true;

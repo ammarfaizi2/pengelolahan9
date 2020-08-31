@@ -274,9 +274,15 @@
                                          where id_siswa='$id_siswa_ubah'");
 
 
-                  require __DIR__."/../jenisbayar/fungsi_bulanan.php";
+                  require_once __DIR__."/../jenisbayar/fungsi_bulanan.php";
+                  require_once __DIR__."/../jenisbayar/fungsi_bebas.php";
 
-                  $sql = ($sql && reconstruct_tagihan_bulanan($koneksi, $id_siswa_ubah, $kelas, $gaji_ortu_oke));
+                  $sql = (
+                    $sql
+                    && reconstruct_tagihan_bulanan($koneksi, $id_siswa_ubah, $kelas, $gaji_ortu_oke)
+                    && reconstruct_tagihan_bebas($koneksi, $id_siswa_ubah, $kelas, $gaji_ortu_oke)
+                  );
+
 
                   if ($sql) {
                     $hapus_gambar = unlink("images/" . $gambar_lama);
@@ -571,6 +577,17 @@
             $data = $query->fetch_assoc();
             if (count($data['nis']) == 0) {
               $sql = $koneksi->query("insert into tb_siswa (nis, nama_siswa, jk, agama, kelas, foto, status, nama_ortu, alamat, no_hp_ortu, gaji_ortu, username, password, level)values('$nis', '$nama', '$jk', '$agama', '$kelas', '$gambar', 'Aktif', '$nama_ortu', '$alamat', '$no_hp_ortu', '$gaji_ortu_oke', '$nis', md5(123456), 'siswa') ");
+
+              $id_siswa = $koneksi->insert_id;
+              require_once __DIR__."/../jenisbayar/fungsi_bulanan.php";
+              require_once __DIR__."/../jenisbayar/fungsi_bebas.php";
+
+              $sql = (
+                $sql
+                && reconstruct_tagihan_bulanan($koneksi, $id_siswa, $kelas, $gaji_ortu_oke)
+                && reconstruct_tagihan_bebas($koneksi, $id_siswa, $kelas, $gaji_ortu_oke)
+              );
+
               if ($sql) {
                 $upload = move_uploaded_file($lokasi, "images/" . $gambar);
                 echo "

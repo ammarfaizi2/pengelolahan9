@@ -952,7 +952,9 @@ if ($tipe_bayar == "Bulanan") {
 											WHERE tb_tagihan_bebas.id_bayar='$id_bayar'
 											AND tb_tagihan_bebas.id_kelas='$kelas' GROUP BY tb_siswa.id_siswa	
                       	");
-
+                                      if (!$sql) {
+                                        var_dump(mysqli_error($koneksi));
+                                      }
 
                                       while ($data = $sql->fetch_assoc()) {
 
